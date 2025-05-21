@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+User-agent: *
+Disallow: /private/ # Block private folders if any
+Sitemap: https://www.ceibz1.com/sitemap.xml
