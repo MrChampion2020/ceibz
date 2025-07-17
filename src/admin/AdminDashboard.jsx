@@ -26,6 +26,7 @@ import {
   FaTablet
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminDashboard = ({ adminInfo, onLogout, onSectionChange }) => {
   const [stats, setStats] = useState({
@@ -65,7 +66,7 @@ const AdminDashboard = ({ adminInfo, onLogout, onSectionChange }) => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/dashboard', {
+      const response = await axios.get(`${api}/api/admin/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

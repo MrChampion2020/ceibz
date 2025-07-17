@@ -28,6 +28,7 @@ import {
   FaRegSadTear
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminStreams = () => {
   const [streams, setStreams] = useState([]);
@@ -62,7 +63,7 @@ const AdminStreams = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/streams', {
+      const response = await axios.get(`${api}/api/admin/streams`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStreams(response.data.streams || []);
@@ -77,7 +78,7 @@ const AdminStreams = () => {
   const handleAddStream = async (streamData) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.post('http://localhost:5000/api/admin/stream', streamData, {
+      const response = await axios.post(`${api}/api/admin/stream`, streamData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -93,7 +94,7 @@ const AdminStreams = () => {
   const handleUpdateStream = async (id, streamData) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.put(`http://localhost:5000/api/admin/stream/${id}`, streamData, {
+      const response = await axios.put(`${api}/api/admin/stream/${id}`, streamData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -113,7 +114,7 @@ const AdminStreams = () => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/stream/${id}`, {
+      await axios.delete(`${api}/api/admin/stream/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -127,7 +128,7 @@ const AdminStreams = () => {
   const handleToggleLive = async (id, isLive) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.patch(`http://localhost:5000/api/admin/stream/${id}/toggle-live`, {}, {
+      const response = await axios.patch(`${api}/api/admin/stream/${id}/toggle-live`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

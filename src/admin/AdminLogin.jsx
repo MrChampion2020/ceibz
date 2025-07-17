@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminLogin = ({ onLoginSuccess }) => {
   const [credentials, setCredentials] = useState({
@@ -27,7 +28,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/login', credentials);
+      const response = await axios.post(`${api}/api/admin/login`, credentials);
       
       // Store token and admin info
       localStorage.setItem('adminToken', response.data.token);

@@ -18,6 +18,7 @@ import {
   FaThumbsDown
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminComments = (props) => {
   const [comments, setComments] = useState([]);
@@ -48,7 +49,7 @@ const AdminComments = (props) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/comments', {
+      const response = await axios.get(`${api}/api/admin/comments`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setComments(response.data.comments || []);
@@ -63,7 +64,7 @@ const AdminComments = (props) => {
   const handleModerateComment = async (commentId, action) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/comment/${commentId}/moderate`, 
+      await axios.patch(`${api}/api/admin/comment/${commentId}/moderate`, 
         { action },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -89,7 +90,7 @@ const AdminComments = (props) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/comment/${commentId}`, {
+      await axios.delete(`${api}/api/admin/comment/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -566,7 +567,7 @@ const CommentModal = ({ comment, onClose, onSave, isMobile }) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.put(`http://localhost:5000/api/admin/comment/${comment._id}`, formData, {
+      await axios.put(`${api}/api/admin/comment/${comment._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       onSave(formData);

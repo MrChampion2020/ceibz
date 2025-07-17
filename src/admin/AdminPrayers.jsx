@@ -26,6 +26,7 @@ import {
   FaDesktop
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminPrayers = () => {
   const [prayerRequests, setPrayerRequests] = useState([]);
@@ -74,7 +75,7 @@ const AdminPrayers = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/prayer-requests', {
+      const response = await axios.get(`${api}/api/admin/prayer-requests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setPrayerRequests(response.data.prayerRequests || []);
@@ -89,7 +90,7 @@ const AdminPrayers = () => {
   const handleStatusUpdate = async (id, status, isAnswered) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/prayer-request/${id}/status`, 
+      await axios.patch(`${api}/api/admin/prayer-request/${id}/status`, 
         { status, isAnswered },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -108,7 +109,7 @@ const AdminPrayers = () => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/prayer-request/${id}/status`, 
+      await axios.patch(`${api}/api/admin/prayer-request/${id}/status`, 
         { 
           status: 'answered', 
           isAnswered: true,

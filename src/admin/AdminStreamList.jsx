@@ -2,12 +2,13 @@
 
 import React from 'react';
 import axios from 'axios';
+import api from '../api';
 
 const StreamList = ({ streams, onSelectStream, fetchStreams }) => {
   
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/admin/stream/${id}`);
+      await axios.delete(`${api}/api/admin/stream/${id}`);
       fetchStreams(); // Refresh the list after deletion
     } catch (error) {
       console.error('Error deleting stream', error);

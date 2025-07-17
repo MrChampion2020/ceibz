@@ -1,7 +1,10 @@
 // src/components/CommentSection.jsx
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaComments, FaUser, FaCalendarAlt, FaThumbsUp, FaThumbsDown, FaFlag, FaShieldAlt, FaExclamationTriangle, FaReply, FaQuoteLeft, FaQuoteRight, FaStar, FaHeart, FaPray, FaHandsHelping, FaFireAlt, FaRegSadTear } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const CommentSection = ({ streamId }) => {
   const [comments, setComments] = useState([]);
@@ -12,7 +15,7 @@ const CommentSection = ({ streamId }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/comments/${streamId}`);
+      const response = await axios.get(`${api}/api/user/comments/${streamId}`);
       setComments(response.data);
     } catch (error) {
       console.error('Error fetching comments', error);
@@ -21,7 +24,7 @@ const CommentSection = ({ streamId }) => {
 
   const handleReaction = async (commentId, reactionType) => {
     try {
-      await axios.put(`http://localhost:5000/api/user/comment/${commentId}/reaction`, { reactionType });
+      await axios.put(`${api}/api/user/comment/${commentId}/reaction`, { reactionType });
       fetchComments(); // Refresh comments to update reactions
     } catch (error) {
       console.error('Error updating reaction', error);

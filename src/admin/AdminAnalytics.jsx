@@ -12,6 +12,7 @@ import {
   FaHeart
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminAnalytics = (props) => {
   const [analytics, setAnalytics] = useState(null);
@@ -39,7 +40,7 @@ const AdminAnalytics = (props) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get(`http://localhost:5000/api/admin/analytics?period=${period}`, {
+      const response = await axios.get(`${api}/api/admin/analytics?period=${period}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAnalytics(response.data);

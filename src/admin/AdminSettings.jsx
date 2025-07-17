@@ -15,6 +15,7 @@ import {
   FaTimes
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 import { AnimatePresence } from 'framer-motion';
 
 const AdminSettings = (props) => {
@@ -66,7 +67,7 @@ const AdminSettings = (props) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.put('http://localhost:5000/api/admin/settings', settings, {
+      await axios.put(`${api}/api/admin/settings`, settings, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSuccess('Settings saved successfully!');

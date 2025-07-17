@@ -17,6 +17,7 @@ import {
   FaExclamationTriangle
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminUsers = (props) => {
   const [users, setUsers] = useState([]);
@@ -47,7 +48,7 @@ const AdminUsers = (props) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/users', {
+      const response = await axios.get(`${api}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data.users || []);
@@ -62,7 +63,7 @@ const AdminUsers = (props) => {
   const handleBlockUser = async (userId, isBlocked) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/user/${userId}/block`, 
+      await axios.patch(`${api}/api/admin/user/${userId}/block`, 
         { isBlocked: !isBlocked },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -81,7 +82,7 @@ const AdminUsers = (props) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/user/${userId}`, {
+      await axios.delete(`${api}/api/admin/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -569,12 +570,12 @@ const UserModal = ({ user, onClose, onSave, isMobile }) => {
       const token = localStorage.getItem('adminToken');
       if (user) {
         // Update existing user
-        await axios.put(`http://localhost:5000/api/admin/user/${user._id}`, formData, {
+        await axios.put(`${api}/api/admin/user/${user._id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
         // Create new user
-        await axios.post('http://localhost:5000/api/admin/user', formData, {
+        await axios.post(`${api}/api/admin/user`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

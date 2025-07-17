@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaCalendarAlt, FaTimes, FaCheck } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 console.log('import.meta.env:', import.meta.env); // DEBUG: Check available env variables
 
@@ -20,7 +21,7 @@ const AdminEvents = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/events', {
+      const response = await axios.get(`${api}/api/admin/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEvents(response.data.events || []);
@@ -34,7 +35,7 @@ const AdminEvents = () => {
   const handleAddEvent = async (eventData) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.post('http://localhost:5000/api/admin/event', eventData, {
+      const response = await axios.post(`${api}/api/admin/event`, eventData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEvents([response.data.event, ...events]);
@@ -48,7 +49,7 @@ const AdminEvents = () => {
   const handleUpdateEvent = async (id, eventData) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.put(`http://localhost:5000/api/admin/event/${id}`, eventData, {
+      const response = await axios.put(`${api}/api/admin/event/${id}`, eventData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEvents(events.map(event => event._id === id ? response.data.event : event));
@@ -63,7 +64,7 @@ const AdminEvents = () => {
     if (!window.confirm('Are you sure you want to delete this event?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/event/${id}`, {
+      await axios.delete(`${api}/api/admin/event/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEvents(events.filter(event => event._id !== id));

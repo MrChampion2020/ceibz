@@ -16,6 +16,7 @@ import {
   FaFileAlt
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminTestimonies = (props) => {
   const [testimonies, setTestimonies] = useState([]);
@@ -46,7 +47,7 @@ const AdminTestimonies = (props) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/testimonies', {
+      const response = await axios.get(`${api}/api/admin/testimonies`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTestimonies(response.data.testimonies || []);
@@ -61,7 +62,7 @@ const AdminTestimonies = (props) => {
   const handleApproveTestimony = async (testimonyId, isApproved) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/testimony/${testimonyId}/approve`, 
+      await axios.patch(`${api}/api/admin/testimony/${testimonyId}/approve`, 
         { isApproved: !isApproved },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +81,7 @@ const AdminTestimonies = (props) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/testimony/${testimonyId}`, {
+      await axios.delete(`${api}/api/admin/testimony/${testimonyId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -533,7 +534,7 @@ const TestimonyModal = ({ testimony, onClose, onSave, isMobile }) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.put(`http://localhost:5000/api/admin/testimony/${testimony._id}`, formData, {
+      await axios.put(`${api}/api/admin/testimony/${testimony._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       onSave(formData);

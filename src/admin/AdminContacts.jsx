@@ -15,6 +15,7 @@ import {
   FaReply
 } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -45,7 +46,7 @@ const AdminContacts = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/admin/contacts', {
+      const response = await axios.get(`${api}/api/admin/contacts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts(response.data.contacts || []);
@@ -60,7 +61,7 @@ const AdminContacts = () => {
   const handleUpdateStatus = async (contactId, status) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`http://localhost:5000/api/admin/contact/${contactId}/status`, 
+      await axios.patch(`${api}/api/admin/contact/${contactId}/status`, 
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -79,7 +80,7 @@ const AdminContacts = () => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:5000/api/admin/contact/${contactId}`, {
+      await axios.delete(`${api}/api/admin/contact/${contactId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -539,7 +540,7 @@ const ContactModal = ({ contact, onClose, onSave, isMobile }) => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.put(`http://localhost:5000/api/admin/contact/${contact._id}`, formData, {
+      await axios.put(`${api}/api/admin/contact/${contact._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       onSave(formData);

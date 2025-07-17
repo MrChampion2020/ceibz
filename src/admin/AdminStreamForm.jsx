@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import api from '../api';
 
 const StreamForm = ({ fetchStreams }) => {
   const [streamUrl, setStreamUrl] = useState('');
@@ -9,7 +10,7 @@ const StreamForm = ({ fetchStreams }) => {
 
     try {
       // Post request to the backend with the stream URL
-      const response = await axios.post('http://localhost:5000/api/admin/stream', { streamUrl });
+      const response = await axios.post(`${api}/api/admin/stream`, { streamUrl });
       console.log('Stream added successfully:', response.data);
       setStreamUrl(''); // Clear input field after successful submission
       fetchStreams(); // Call the parent function to refresh stream list

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaVideo, FaPlay, FaPause, FaEdit, FaTrash, FaEye, FaTimes, FaCheck, FaExclamationTriangle, FaMobile, FaDesktop, FaPray, FaHandsHelping, FaFireAlt, FaHeart, FaRegSadTear } from 'react-icons/fa';
 import axios from 'axios';
+import api from '../api';
 import StreamForm from './AdminStreamForm';
 import StreamList from './AdminStreamList';
 import StreamPreview from './AdminStreamPreview';
@@ -17,7 +20,7 @@ const AdminScreen = () => {
   // Fetch streams from the backend
   const fetchStreams = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/streams');
+      const response = await axios.get(`${api}/api/admin/streams`);
       setStreams(response.data);
     } catch (error) {
       console.error('Error fetching streams', error);
