@@ -138,6 +138,7 @@ const AdminEvents = () => {
 const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+const CLOUDINARY_VIDEO_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`;
 
 const EventForm = ({ event, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -147,12 +148,16 @@ const EventForm = ({ event, onClose, onSubmit }) => {
     endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '',
     location: event?.location || '',
     imageUrl: event?.imageUrl || '',
+    videoUrl: event?.videoUrl || '',
+    videoDuration: event?.videoDuration || 0,
     category: event?.category || 'main',
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoUploadProgress, setVideoUploadProgress] = useState(0);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -189,6 +194,54 @@ const EventForm = ({ event, onClose, onSubmit }) => {
       setUploading(false);
       alert('Image upload failed');
     }
+  };
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    // Check video duration (max 10 mins = 600s)
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = async () => {
+      window.URL.revokeObjectURL(video.src);
+      if (video.duration > 600) {
+        alert('Video must be 10 minutes or less.');
+        return;
+      }
+      setVideoUploading(true);
+      setVideoUploadProgress(0);
+      const form = new FormData();
+      form.append('file', file);
+      form.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      form.append('folder', 'ceibz1/events');
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', CLOUDINARY_VIDEO_UPLOAD_URL);
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            setVideoUploadProgress(Math.round((event.loaded / event.total) * 100));
+          }
+        };
+        xhr.onload = () => {
+          setVideoUploading(false);
+          if (xhr.status === 200) {
+            const res = JSON.parse(xhr.responseText);
+            setFormData(prev => ({ ...prev, videoUrl: res.secure_url, videoDuration: Math.round(video.duration) }));
+          } else {
+            alert('Video upload failed');
+          }
+        };
+        xhr.onerror = () => {
+          setVideoUploading(false);
+          alert('Video upload failed');
+        };
+        xhr.send(form);
+      } catch (err) {
+        setVideoUploading(false);
+        alert('Video upload failed');
+      }
+    };
+    video.src = URL.createObjectURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -256,6 +309,13 @@ const EventForm = ({ event, onClose, onSubmit }) => {
             <input type="file" accept="image/*" onChange={handleImageUpload} style={{ marginBottom: '8px' }} />
             {uploading && <div style={{ fontSize: '12px', color: '#2a1e7a' }}>Uploading... {uploadProgress}%</div>}
             {formData.imageUrl && <img src={formData.imageUrl} alt="Preview" style={{ width: '100%', borderRadius: '8px', marginTop: '8px', maxHeight: '120px', objectFit: 'cover' }} />}
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#374151' }}>Event Video (max 10 mins, optional)</label>
+            <input type="file" accept="video/*" onChange={handleVideoUpload} style={{ marginBottom: '8px' }} />
+            {videoUploading && <div style={{ fontSize: '12px', color: '#2a1e7a' }}>Uploading... {videoUploadProgress}%</div>}
+            {formData.videoUrl && <video src={formData.videoUrl} controls style={{ width: '100%', borderRadius: '8px', marginTop: '8px', maxHeight: '120px', objectFit: 'cover' }} />}
+            <div style={{ fontSize: '12px', color: '#f59e0b', marginTop: '4px' }}>Note: Only videos 10 minutes or less are allowed.</div>
           </div>
           <motion.button type="submit" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} disabled={loading} style={{ padding: '12px 24px', backgroundColor: '#2a1e7a', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             {loading ? (<div style={{ width: '20px', height: '20px', border: '3px solid #f3f3f3', borderTop: '3px solid #2a1e7a', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>) : (<><FaCheck />{event ? 'Update Event' : 'Add Event'}</>)}

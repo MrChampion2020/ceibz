@@ -160,7 +160,7 @@ const AdminTestimonies = (props) => {
         <p style={{
           fontSize: '16px',
         color: '#6b7280'
-        }}>
+      }}>
           Review and approve user testimonies
         </p>
       </div>
