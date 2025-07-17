@@ -146,7 +146,8 @@ const EventForm = ({ event, onClose, onSubmit }) => {
     startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '',
     endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '',
     location: event?.location || '',
-    imageUrl: event?.imageUrl || ''
+    imageUrl: event?.imageUrl || '',
+    category: event?.category || 'main',
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -241,6 +242,14 @@ const EventForm = ({ event, onClose, onSubmit }) => {
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#374151' }}>Location</label>
             <input type="text" name="location" value={formData.location} onChange={handleInputChange} style={{ width: '100%', padding: '12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', outline: 'none', color: '#374151' }} placeholder="e.g., Church Auditorium" />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#374151' }}>Category *</label>
+            <select name="category" value={formData.category} onChange={handleInputChange} required style={{ width: '100%', padding: '12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', outline: 'none', color: '#374151' }}>
+              <option value="main">Main Church</option>
+              <option value="children">Children</option>
+              <option value="teens">Teens</option>
+            </select>
           </div>
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#374151' }}>Event Image</label>
